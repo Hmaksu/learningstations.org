@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Station Design Guide | İTÜ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .itu-navy { background-color: #003057; }
+        .itu-gold { color: #EAAA00; }
+        .bg-itu-gold { background-color: #EAAA00; }
+        .border-itu-gold { border-color: #EAAA00; }
+        
+        /* Language Toggle Animation */
+        .lang-node { transition: opacity 0.3s ease; }
+        .hidden-lang { display: none; }
+
+        /* Card Hover Effects */
+        .ls-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .ls-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 48, 87, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-sm border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 itu-navy rounded-lg flex items-center justify-center text-white font-bold">LS</div>
+                    <span class="font-bold text-xl tracking-tight text-slate-800">Learning Station</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleLanguage()" id="langSwitcher" class="px-3 py-1 border border-slate-300 rounded-full text-sm font-medium hover:bg-slate-100 transition-colors">
+                        English
+                    </button>
+                    <a href="#design" class="hidden sm:block px-4 py-2 bg-itu-gold text-white rounded-md font-semibold hover:opacity-90 transition-opacity">
+                        <span class="lang-tr">LS Tasarla</span>
+                        <span class="lang-en hidden-lang">Design LS</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-32 pb-16 itu-navy text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5"/></pattern></defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
+                    <span class="lang-tr">Eğitimi Dönüştüren Modüler Yaklaşım</span>
+                    <span class="lang-en hidden-lang">A Modular Approach Transforming Education</span>
+                </h1>
+                <p class="text-lg md:text-xl mb-10 text-slate-300">
+                    <span class="lang-tr">İTÜ Mükemmeliyet Merkezi tarafından geliştirilen Learning Station (Öğrenme İstasyonu) modeli ile öğrenme süreçlerini birlikte tasarlıyoruz.</span>
+                    <span class="lang-en hidden-lang">We co-design learning processes with the Learning Station model developed by the ITU Center for Excellence.</span>
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="https://petek.itu.edu.tr" target="_blank" class="px-8 py-4 bg-itu-gold text-white rounded-lg font-bold text-center hover:brightness-110 shadow-lg transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        <span class="lang-tr">Petek.itü'de Oku</span>
+                        <span class="lang-en hidden-lang">Read on Petek.itü</span>
+                    </a>
+                    <a href="#design" class="px-8 py-4 bg-white text-[#003057] rounded-lg font-bold text-center hover:bg-slate-100 transition-all">
+                        <span class="lang-tr">Kendi LS'ini Tasarla</span>
+                        <span class="lang-en hidden-lang">Design Your Own LS</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content Sections -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-32">
+        
+        <!-- About Section -->
+        <section id="about" class="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl font-bold mb-6 itu-gold">
+                    <span class="lang-tr">LS Modeli Nedir?</span>
+                    <span class="lang-en hidden-lang">What is the LS Model?</span>
+                </h2>
+                <div class="space-y-4 text-slate-600 leading-relaxed text-lg">
+                    <p>
+                        <span class="lang-tr">Learning Station (LS), aktif öğrenme yöntemlerinin modüler bir şekilde kurgulandığı yenilikçi bir eğitim modelidir. Bu model, öğrencileri pasif alıcılar olmaktan çıkarıp, bilginin üretiminde aktif rol alan tasarımcılar haline getirir.</span>
+                        <span class="lang-en hidden-lang">The Learning Station (LS) is an innovative educational model where active learning methods are structured modularly. It transforms students from passive recipients into active designers involved in knowledge production.</span>
+                    </p>
+                    <p>
+                        <span class="lang-tr">Hocaların mentorluk rolü üstlendiği bu süreçte, tüm paydaşlar (sektör, mezunlar, öğrenciler) öğrenme deneyimini birlikte inşa eder.</span>
+                        <span class="lang-en hidden-lang">In this process, where teachers act as mentors, all stakeholders (industry, alumni, students) build the learning experience together.</span>
+                    </p>
+                </div>
+            </div>
+            <div class="bg-slate-200 aspect-video rounded-2xl flex items-center justify-center p-8">
+                <div class="text-center space-y-4">
+                    <div class="flex justify-center gap-2">
+                        <div class="w-8 h-16 bg-itu-gold rounded"></div>
+                        <div class="w-8 h-20 bg-blue-800 rounded"></div>
+                        <div class="w-8 h-12 bg-green-600 rounded"></div>
+                        <div class="w-8 h-24 bg-red-500 rounded"></div>
+                    </div>
+                    <p class="text-sm font-semibold text-slate-500 italic">
+                        <span class="lang-tr">[Modüler Öğrenme Görseli]</span>
+                        <span class="lang-en hidden-lang">[Modular Learning Visualization]</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="ls-card p-8 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                <div class="w-12 h-12 itu-navy text-white rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-4">
+                    <span class="lang-tr">Modüler Tasarım</span>
+                    <span class="lang-en hidden-lang">Modular Design</span>
+                </h3>
+                <p class="text-slate-500">
+                    <span class="lang-tr">Her öğrenme deneyimi bağımsız ama birbirini tamamlayan modüllerden oluşur. Tıpkı Lego parçaları gibi!</span>
+                    <span class="lang-en hidden-lang">Each learning experience consists of independent but complementary modules. Just like Lego bricks!</span>
+                </p>
+            </div>
+
+            <div class="ls-card p-8 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                <div class="w-12 h-12 itu-navy text-white rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-4">
+                    <span class="lang-tr">SMART Hedefler</span>
+                    <span class="lang-en hidden-lang">SMART Objectives</span>
+                </h3>
+                <p class="text-slate-500">
+                    <span class="lang-tr">Spesifik, ölçülebilir, ulaşılabilir, ilgili ve zaman sınırlı öğrenme hedefleri ile net bir yol haritası.</span>
+                    <span class="lang-en hidden-lang">A clear roadmap with specific, measurable, achievable, relevant, and time-bound learning goals.</span>
+                </p>
+            </div>
+
+            <div class="ls-card p-8 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                <div class="w-12 h-12 itu-navy text-white rounded-full flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-4">
+                    <span class="lang-tr">Küresel İşbirliği</span>
+                    <span class="lang-en hidden-lang">Global Collaboration</span>
+                </h3>
+                <p class="text-slate-500">
+                    <span class="lang-tr">SDG (Sürdürülebilir Kalkınma Amaçları) ile uyumlu, disiplinlerarası bir eğitim ekosistemi.</span>
+                    <span class="lang-en hidden-lang">An interdisciplinary educational ecosystem aligned with the SDGs (Sustainable Development Goals).</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Design CTA -->
+        <section id="design" class="bg-slate-900 rounded-3xl p-12 text-white text-center">
+            <h2 class="text-4xl font-bold mb-8">
+                <span class="lang-tr">Kendi Öğrenme İstasyonunuzu Planlayın</span>
+                <span class="lang-en hidden-lang">Plan Your Own Learning Station</span>
+            </h2>
+            <div class="max-w-2xl mx-auto space-y-8">
+                <p class="text-slate-400">
+                    <span class="lang-tr">LSDG rehberindeki LS Matrisi ve Katalog Formu araçlarını kullanarak kendi öğrenme yolculuğunuzu başlatmaya hazır mısınız?</span>
+                    <span class="lang-en hidden-lang">Are you ready to start your own learning journey using the LS Matrix and Catalog Form tools in the LSDG guide?</span>
+                </p>
+                <div class="bg-white/5 border border-white/10 rounded-xl p-6 text-left">
+                    <h4 class="font-bold mb-4 text-itu-gold">
+                        <span class="lang-tr">Tasarım Adımları:</span>
+                        <span class="lang-en hidden-lang">Design Steps:</span>
+                    </h4>
+                    <ol class="space-y-3 text-slate-300 list-decimal list-inside">
+                        <li class="lang-tr">Konu ve hedefleri belirleyin.</li>
+                        <li class="lang-en hidden-lang">Identify topics and objectives.</li>
+                        <li class="lang-tr">LS Katalog Formunu doldurun.</li>
+                        <li class="lang-en hidden-lang">Fill out the LS Catalog Form.</li>
+                        <li class="lang-tr">LS Matrisi ile içerik teslim modlarını (Video, Hands-on, vb.) seçin.</li>
+                        <li class="lang-en hidden-lang">Select delivery modes (Video, Hands-on, etc.) with LS Matrix.</li>
+                        <li class="lang-tr">Değerlendirme yöntemlerini tanımlayın.</li>
+                        <li class="lang-en hidden-lang">Define assessment methods.</li>
+                    </ol>
+                </div>
+                <button class="px-10 py-5 bg-itu-gold rounded-full text-xl font-bold hover:scale-105 transition-transform">
+                    <span class="lang-tr">LS Planlayıcıyı Başlat</span>
+                    <span class="lang-en hidden-lang">Start LS Planner</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="flex justify-center mb-6">
+                <div class="w-12 h-12 itu-navy text-white rounded-lg flex items-center justify-center font-bold">İTÜ</div>
+            </div>
+            <p class="text-slate-500 text-sm">
+                &copy; 2024 İstanbul Teknik Üniversitesi - Mükemmeliyet Merkezi
+            </p>
+            <p class="text-slate-400 text-xs mt-2">
+                <span class="lang-tr">Learning Station Tasarım Rehberi (LSDG)</span>
+                <span class="lang-en hidden-lang">Learning Station Design Guide (LSDG)</span>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        let currentLang = 'tr';
+
+        function toggleLanguage() {
+            const trNodes = document.querySelectorAll('.lang-tr');
+            const enNodes = document.querySelectorAll('.lang-en');
+            const btn = document.getElementById('langSwitcher');
+
+            if (currentLang === 'tr') {
+                trNodes.forEach(node => node.classList.add('hidden-lang'));
+                enNodes.forEach(node => node.classList.remove('hidden-lang'));
+                btn.innerText = 'Türkçe';
+                currentLang = 'en';
+            } else {
+                enNodes.forEach(node => node.classList.add('hidden-lang'));
+                trNodes.forEach(node => node.classList.remove('hidden-lang'));
+                btn.innerText = 'English';
+                currentLang = 'tr';
+            }
+        }
+    </script>
+</body>
+</html>
