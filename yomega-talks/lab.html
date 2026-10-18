@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#1b3558">
-<title>YÖMEGA Lab · Yapay zekânın etik ve sorumlu kullanımı</title>
+<title>YÖMEGA Lab · Canlı ortak öğrenme matrisi</title>
 <style>
 :root{--navy:#1c3659;--navy2:#29496e;--ink:#243447;--muted:#66798a;--line:#d8e3eb;--light:#f4f7f9;--mint:#dff0e8;--teal:#347765;--blue:#e8f1fa;--shadow:0 12px 35px rgba(32,53,80,.055)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:#f2f6f8;font:16px/1.55 -apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif}button,input,select,canvas{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8dc7db;outline-offset:3px}
@@ -91,7 +91,7 @@ table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px;font
 .vote-note{margin:0 0 9px;color:#557181;font-size:13px}
 @media(max-width:600px){.access-gate{padding:20px 16px}.access-row{flex-direction:column}.access-row button{width:100%}.access-header{align-items:flex-start}.access-lock{white-space:nowrap}}
 
-/* Kolaylaştırıcı kontrollü yerel sıfırlama ve üç modüllü sonuç grafikleri */
+/* Kolaylaştırıcı kontrollü merkezi sıfırlama ve üç modüllü sonuç grafikleri */
 .facilitator-reset{color:#6d5360!important;border-color:#d8cbd1!important;background:#fff9fb!important}
 .reset-status{margin:0 24px 18px;padding:11px 15px;border-radius:12px;background:#e9f5ef;border:1px solid #bbddca;color:#215f46;font-size:13px;font-weight:700}
 .module-chart-heading{margin:4px 24px 16px}
@@ -118,12 +118,16 @@ table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px;font
 .reset-cancel{border:1px solid #cbdbe6;border-radius:12px;background:#fff;color:#456176;padding:12px 15px;font-size:14px;font-weight:750}
 @media(max-width:1100px){.module-charts{grid-template-columns:1fr}.module-chart-flex{grid-template-columns:300px 1fr;align-items:center}}
 @media(max-width:600px){.module-chart-flex{grid-template-columns:1fr}.module-charts{padding:0 14px 18px}.module-chart-heading{margin:4px 14px 14px}.reset-dialog{padding:20px 16px}.reset-actions{flex-direction:column-reverse}.reset-actions button{width:100%}}
+ .connection-status{margin-bottom:15px;border:1px solid #cbdfe9;padding:12px 16px;border-radius:12px;background:#eef6fb;color:#355b78;font-size:13px;font-weight:750}
+ .connection-status.ok{border-color:#bfddc9;background:#edf7f1;color:#2a674e}
+ .connection-status.error{border-color:#ebc2b5;background:#fff4ef;color:#8a4739}
 </style>
 </head>
 <body>
 <header class="header"><div class="head-inner"><div><div class="eyebrow">YÖMEGA TALKS GÜZ 2026 · ORTAK TASARIM LABORATUVARI</div><h1>Yapay zekânın etik ve sorumlu kullanımı</h1><p>Birlikte Öğrenme İstasyonu matrisi oluşturalım</p></div><span class="header-chip">3 modül · 7 sabit konu · Yöntem seçimi</span></div></header>
 <main>
 <div class="intro"><div><h2>Öğrenme deneyimlerini birlikte tasarlayalım</h2><p>Önceden belirlenmiş üç modülden birini ve o modülün sabit içerik başlıklarından birini seçin. <b>Öğrenme kazanımını dikkate alarak</b> bu konuyu öğrenmeyi ve uygulamayı destekleyecek yöntemleri önerin. Seçimler ortak tasarım önerisi olarak matriste sayılır; yoğunlukları etkililik kanıtı değildir.</p></div><div class="mode-tabs"><button type="button" id="tabParticipate" aria-pressed="true">Katkı ekle</button><button type="button" id="tabPresent" aria-pressed="false">Sunum / matris</button><button type="button" id="tabCharts" aria-pressed="false">Sonuç grafikleri</button></div></div>
+<div id="connectionStatus" class="connection-status" role="status" aria-live="polite">Ortak veritabanına bağlanıyor…</div>
 
 <section class="view" id="participantView">
  <div class="panel" id="accessGate">
@@ -134,9 +138,9 @@ table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px;font
     <form id="accessForm" autocomplete="off">
       <label for="accessInput" class="field-heading">Katılım kodu</label>
       <div class="access-row"><input type="password" id="accessInput" required placeholder="Etkinlik kodunu girin" autocomplete="off" spellcheck="false"/><button class="primary" type="submit" id="unlockBtn">Katıl →</button></div>
-      <p id="accessError" class="access-error" role="alert" hidden>Katılım kodu eşleşmedi. Lütfen yeniden deneyin.</p>
+      <p id="accessError" class="access-error" role="alert" hidden>Katılım kodu hatalı. Lütfen yeniden deneyin.</p>
     </form>
-    <div class="access-hint">Bu kod yalnızca HTML prototipindeki katılım ekranını sınırlar. Farklı cihazların ortak veri havuzuna güvenli katkı göndermesi için sunucu doğrulaması ve merkezi veritabanı gerekir.</div>
+    <div class="access-hint">Kod, merkezi sunucuda doğrulanır. Her katılımcı oturumu için konu başına tek yanıt kaydedilir. Başkalarının yanıtlarını değiştirmek mümkün değildir.</div>
    </div>
  </div>
  <div class="panel" id="formPanel" hidden>
@@ -159,7 +163,7 @@ table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px;font
       <div class="method-tools"><label for="methodSearch">Seçeneklerde ara <span id="optionTotal"></span></label><div class="tool-row"><input id="methodSearch" type="search" placeholder="Örn. simülasyon, tartışma, vaka..." aria-label="Öğrenme yöntemi ara"/><button type="button" id="expandGroups">Tümünü aç</button><span class="selection-counter" id="selectedCount" aria-live="polite">0 / 5 seçildi</span></div></div><div class="method-key"><b>Öğrenme etkinlikleri:</b> ABC Learning Design’ın altı öğrenme türü <span class="key-separator">·</span> <b>Destekleyici boyutlar:</b> Araçlar ve değerlendirme</div><div class="group-grid" id="methodGroups"></div><p class="source-note">Pedagojik sınıflandırma: <a href="https://www.ucl.ac.uk/short-courses/staff-resources/course-design/designing-learning-activities" target="_blank" rel="noopener">UCL · ABC Learning Design</a> ve <a href="https://udlguidelines.cast.org/" target="_blank" rel="noopener">CAST · UDL 3.0</a>. Tercihler, öğrenmenin etkililiğini tek başına kanıtlamaz; kazanım ve değerlendirmeyle birlikte yorumlanmalıdır.</p>
     </div>
   </div>
-  <div class="actions"><p>Her başlık için bu tarayıcıdan yalnızca bir yanıt gönderilebilir. Katılımcılar mevcut kayıtları değiştiremez; kolaylaştırıcı denemeleri yerel olarak sıfırlayabilir.</p><button type="button" class="primary" id="submitBtn">Önerimi matrise ekle →</button></div>
+  <div class="actions"><p>Her katılımcı oturumu, aynı konu için yalnızca bir öneri gönderebilir. Başka yanıtlar değiştirilemez. Kolaylaştırıcı ortak verileri sıfırlayabilir.</p><button type="button" class="primary" id="submitBtn">Önerimi matrise ekle →</button></div>
   <div class="notice" id="notice" role="status" aria-live="polite"></div>
  </div>
 </section>
@@ -170,7 +174,7 @@ table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px;font
 
 <section class="panel view" id="matrixPanel" hidden>
   <div class="topline"><div><h3>Ortak Öğrenme İstasyonu matrisi</h3><p>Üç modülde yedi sabit içerik başlığı ve katılımcıların yöntem tercihleri</p></div><div class="small-controls"><button type="button" id="exportCsv">CSV indir</button><button type="button" id="openResetBtn" class="facilitator-reset">Kolaylaştırıcı · Sıfırla</button></div></div>
-  <div class="meta"><span class="counter"><b id="ownCount">0</b> katılımcı yanıtı</span><span class="counter"><b id="visibleCount">7</b> sabit içerik</span><span class="counter"><b>3</b> sabit modül</span></div>
+  <div class="meta"><span class="counter"><b id="ownCount">0</b> ortak katılımcı yanıtı</span><span class="counter"><b id="visibleCount">7</b> sabit içerik</span><span class="counter"><b>3</b> sabit modül</span></div>
   <p id="resetStatus" class="reset-status" aria-live="polite" hidden></p>
   <div class="table-wrap" role="region" aria-label="Öğrenme İstasyonu matrisi" tabindex="0"><table><thead><tr><th scope="col">Modül / içerik başlığı</th><th scope="col">Bilgi edinme</th><th scope="col">Araştırma</th><th scope="col">Tartışma</th><th scope="col">Uygulama</th><th scope="col">İş birliği</th><th scope="col">Üretim</th><th scope="col">Dijital araçlar</th><th scope="col">Değerlendirme</th></tr></thead><tbody id="tableBody"></tbody></table></div>
   <div class="matrix-foot">Her hücrede ilgili başlık için tercih edilen yöntemler ve kaç kez seçildikleri gösterilir. Başlıklar sabittir; kimse başka birinin seçimini değiştiremez.</div>
@@ -205,57 +209,80 @@ table{border-collapse:separate;border-spacing:0;width:100%;min-width:1080px;font
 </section>
 
 <dialog class="reset-dialog" id="resetDialog" aria-labelledby="resetTitle">
-  <div class="reset-heading"><div><span class="reset-eyebrow">KOLAYLAŞTIRICI İŞLEMİ</span><h3 id="resetTitle">Yerel yanıtları sıfırla</h3></div><button type="button" id="closeResetBtn" class="reset-close" aria-label="Pencereyi kapat">✕</button></div>
-  <p class="reset-explain">Bu işlem yalnızca <strong>bu tarayıcıdaki</strong> katılımcı yanıtlarını temizler. Sabit modüller ve içerik başlıkları kalır. Başka cihazlardaki kayıtlar bu prototipte silinemez.</p>
+  <div class="reset-heading"><div><span class="reset-eyebrow">KOLAYLAŞTIRICI İŞLEMİ</span><h3 id="resetTitle">Tüm katılımcı yanıtlarını sıfırla</h3></div><button type="button" id="closeResetBtn" class="reset-close" aria-label="Pencereyi kapat">✕</button></div>
+  <p class="reset-explain">Bu işlem <strong>ortak veritabanındaki tüm yanıtları</strong> temizler. Sabit modüller ve içerik başlıkları kalır. İşlem sonrasında katılımcıların yeniden giriş yapması gerekir.</p>
   <form id="resetForm" autocomplete="off">
     <div id="resetPinStep"><label class="field-heading" for="resetPin">Kolaylaştırıcı şifresi</label><input id="resetPin" type="password" inputmode="numeric" maxlength="12" autocomplete="off" placeholder="4 haneli kod" required/></div>
-    <p id="resetConfirmStep" class="reset-warning" hidden>Şifre doğrulandı. Bu cihazdaki <b id="resetCount">0</b> yanıt geri alınamayacak şekilde temizlenecek. Devam etmek istiyor musunuz?</p>
+    <p id="resetConfirmStep" class="reset-warning" hidden>Kod girildi. Onaylarsanız sunucudaki <b id="resetCount">0</b> yanıt, kodun sunucuda doğrulanmasının ardından geri alınamayacak şekilde temizlenecek. Devam etmek istiyor musunuz?</p>
     <p id="resetError" class="access-error" role="alert" hidden></p>
     <div class="reset-actions"><button type="button" class="reset-cancel" id="cancelResetBtn">İptal</button><button type="submit" id="confirmResetBtn" class="primary">Şifreyi doğrula</button></div>
   </form>
 </dialog>
 
-<div class="subnote"><b>Demo sınırı:</b> Katılım ve kolaylaştırıcı şifreleri HTML tarafında doğrulanır; gerçek güvenlik veya veri koruma sağlamaz. Kayıtlar her cihazın kendi tarayıcısında tutulur; sıfırlama yalnızca bu cihazda etkilidir. Ortak canlı sonuçlar, merkezi sıfırlama ve güvenilir erişim için sunucu tarafında kimlik doğrulama, rol yetkileri ve merkezi veritabanı gerekir.</div>
-<div class="footer">YÖMEGA Lab · Sabit içeriklere yöntem seçimi prototipi · Mevcut YÖMEGA sunumundan bağımsızdır.</div>
+<div class="subnote"><b>Canlı YÖMEGA Lab:</b> Kayıtlar merkezi Supabase veritabanında saklanır. Matris ve grafikler açıkken yaklaşık 5 saniyede bir yenilenir. Tarayıcı oturumu başına her konu için bir seçim yapılabilir; bu, kişisel kimlik doğrulaması yerine geçmez.</div>
+<div class="footer">YÖMEGA Lab · Sabit içeriklere yöntem seçimi prototipi · Ortak veritabanı sürümü.</div>
 </main>
 
 <script>
 (()=>{'use strict';
-const STORE='yomega_lab_v7_etik_yz_2026';
-const PREVIOUS_STORE='yomega_lab_v6_etik_yz_2026';
-const ACCESS_HASH='395a9e10dbe9feecdbed82d591927a92c5160b704f49ab7f17342e7951abe1a4';
-const FACILITATOR_HASH='3ab57220f1f10003766dcc4180152b17dfdd7cc9f4e5ccdecf5b48df25ae861c';
-const ACCESS_SESSION='yomega_lab_authorized_session_v1';
-let authorized=false;
-async function digestText(value){
-  if(!(window.crypto&&crypto.subtle)) throw new Error('Güvenli oturum gerekir (HTTPS veya yerel dosya).');
-  const data=new TextEncoder().encode(value);
-  const hash=await crypto.subtle.digest('SHA-256',data);
-  return [...new Uint8Array(hash)].map(b=>b.toString(16).padStart(2,'0')).join('');
+// SUPABASE API ADDRESS: set to the real Project URL once Edge Function is deployed.
+const API_BASE='https://upafwdypujxjvqscildg.supabase.co/functions/v1/yomega-lab';
+const SESSION_STORE='yomega_lab_remote_session_v1';
+let authorized=false, sessionToken='', myVotedTopics=new Set(), serverReady=false, requestInProgress=false, lastGeneration=null;
+const $=id=>document.getElementById(id);
+function connection(message, ok){
+  const el=$('connectionStatus');el.textContent=message;
+  el.className='connection-status '+(ok===true?'ok':ok===false?'error':'');
 }
-function updateAccess(){
-  $('accessGate').hidden=authorized;
-  $('formPanel').hidden=!authorized;
+async function api(action,payload={},method='POST'){
+  if(API_BASE.includes('YOUR_PROJECT_REF')) throw new Error('Supabase API adresi henüz yapılandırılmadı. Kurulum rehberini izleyin.');
+  const cfg={method,cache:'no-store',headers:{'Content-Type':'application/json'}};
+  if(method!=='GET')cfg.body=JSON.stringify({action,...payload});
+  let response;
+  try{response=await fetch(API_BASE,cfg)}catch(_){throw new Error('Sunucuya erişilemiyor. İnternet ve Supabase ayarlarını kontrol edin.');}
+  const json=await response.json().catch(()=>({}));
+  if(!response.ok){const err=new Error(json.error||'Sunucu hatası ('+response.status+')');err.status=response.status;throw err;}
+  return json;
 }
-function relock(){ authorized=false;try{sessionStorage.removeItem(ACCESS_SESSION)}catch(e){}updateAccess();}
+function updateAccess(){ $('accessGate').hidden=authorized; $('formPanel').hidden=!authorized; }
+function relock(){ authorized=false;sessionToken='';myVotedTopics.clear();try{sessionStorage.removeItem(SESSION_STORE)}catch(_){}updateAccess(); }
 async function unlock(e){
-  e.preventDefault();
-  const input=$('accessInput'), btn=$('unlockBtn');
-  $('accessError').hidden=true; btn.disabled=true;
+  e.preventDefault();const btn=$('unlockBtn');btn.disabled=true;$('accessError').hidden=true;
   try{
-    const hash=await digestText(input.value);
-    if(hash===ACCESS_HASH){
-      authorized=true;
-      try{sessionStorage.setItem(ACCESS_SESSION,'true')}catch(e){}
-      input.value=''; updateAccess();
-    }else{
-      $('accessError').textContent='Katılım kodu eşleşmedi. Lütfen yeniden deneyin.';
-      $('accessError').hidden=false;
+    const result=await api('login',{accessCode:$('accessInput').value});
+    sessionToken=result.sessionToken;
+    myVotedTopics=new Set(result.votedTopics||[]);
+    authorized=true;
+    try{sessionStorage.setItem(SESSION_STORE,sessionToken)}catch(_){}
+    $('accessInput').value='';updateAccess();updateTopicStyles();
+    await refreshState();
+  }catch(err){$('accessError').textContent=err.message;$('accessError').hidden=false;}
+  finally{btn.disabled=false;}
+}
+async function restoreSession(){
+  try{sessionToken=sessionStorage.getItem(SESSION_STORE)||''}catch(_){sessionToken=''}
+  if(sessionToken){
+    try{const result=await api('session',{sessionToken});authorized=true;myVotedTopics=new Set(result.votedTopics||[]);}
+    catch(_){relock();}
+  }
+  updateAccess();updateTopicStyles();
+}
+async function refreshState(){
+  if(requestInProgress)return;
+  requestInProgress=true;
+  try{
+    const data=await api('',{},'GET');
+    if(lastGeneration!==null && data.generation!==lastGeneration && sessionToken) {
+      relock();
+      connection('Kolaylaştırıcı ortak verileri sıfırladı. Yeniden katkı yapmak için tekrar giriş yapın.',true);
     }
-  }catch(err){
-    $('accessError').textContent='Kod doğrulaması yapılamıyor. Dosyayı HTTPS üzerinden açın.';
-    $('accessError').hidden=false;
-  }finally{btn.disabled=false;}
+    lastGeneration=data.generation;
+    rows=Array.isArray(data.rows)?data.rows.filter(r=>TOPICS.some(t=>t.id===r.topicId)&&Array.isArray(r.methods)):[];
+    serverReady=true;
+    connection('Ortak veritabanına bağlı · '+rows.length+' katılımcı yanıtı · Canlı sonuçlar otomatik yenilenir.',true);
+    renderMatrix();renderCharts();updateTopicStyles();
+  }catch(err){serverReady=false;connection('Bağlantı yok: '+err.message,false);}
+  finally{requestInProgress=false;}
 }
 
 const MODS=[['m1','M1 · Akademik bütünlük ve temel ilkeler'],['m2','M2 · Etik riskler ve karar verme'],['m3','M3 · Sorumlu uygulama ve değerlendirme']];
@@ -283,16 +310,7 @@ const TOPICS=[
 ];
 let topicId='t1';
 let mod='m1', view='participate', rows=[];
-const $=id=>document.getElementById(id);
-function safeRead(){
-  try{
-    let a=JSON.parse(localStorage.getItem(STORE)||'[]');
-    return Array.isArray(a)?a.filter(x=>x&&typeof x.id==='string'&&TOPICS.some(t=>t.id===x.topicId)&&Array.isArray(x.methods)).map(x=>({
-      id:x.id,topicId:x.topicId,methods:[...new Set(x.methods.filter(m=>METHOD_LABEL[m]))].slice(0,5)
-    })):[];
-  }catch(_){return []}
-}
-function safeSave(r){try{localStorage.setItem(STORE,JSON.stringify(r));return true}catch(e){console.warn(e);return false}}
+
 function make(tag,cls,text){const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el}
 function notice(msg,type='success'){const box=$('notice');box.textContent=msg;box.className='notice '+type}
 function renderOptionGroups(){
@@ -372,7 +390,7 @@ function updateTopicStyles(){
   const t=TOPICS.find(t=>t.id===topicId);
   $('outcomeFocus').textContent='';
   if(t){const b=make('b','','Hedef öğrenme kazanımı: '); $('outcomeFocus').append(b,document.createTextNode(t.outcome))}
-  const alreadyVoted=rows.some(r=>r.topicId===topicId);
+  const alreadyVoted=myVotedTopics.has(topicId);
   $('submitBtn').disabled=alreadyVoted;
   $('submitBtn').textContent=alreadyVoted?'Bu konu için yanıt kaydedildi':'Önerimi matrise ekle →';
 }
@@ -391,7 +409,8 @@ function setView(v){
   $('tabPresent').setAttribute('aria-pressed',String(v==='present'));
   $('tabCharts').setAttribute('aria-pressed',String(v==='charts'));
   if(v==='present') $('matrixPanel').scrollIntoView({block:'start',behavior:'smooth'});
-  if(v==='charts'){renderCharts(); $('chartsView').scrollIntoView({block:'start',behavior:'smooth'});}  
+  if(v==='charts'){renderCharts(); $('chartsView').scrollIntoView({block:'start',behavior:'smooth'});}
+  if(v==='present'||v==='charts') refreshState();
 }
 function renderMatrix(){
   const body=$('tableBody');body.replaceChildren();
@@ -467,22 +486,28 @@ function renderCharts(){
     renderLegend(mid+'GroupLegend',counts,groupColors);
   }
 }
-function submit(){
-  if(!authorized){notice('Öneri göndermek için katılım kodunu girin.','error'); updateAccess(); return}
+async function submit(){
+  if(!authorized||!sessionToken){notice('Katılmak için erişim kodunu girin.','error');updateAccess();return}
   const fixed=TOPICS.find(t=>t.id===topicId&&t.mod===mod);
   const methods=[...document.querySelectorAll('#methodGroups input:checked')].map(x=>x.value);
-  if(!fixed){notice('Lütfen bir içerik başlığı seçin.','error');return}
-  if(!methods.length){notice('Lütfen en az bir aktarım biçimi seçin.','error');return}
-  if(methods.length>5){notice('En fazla beş aktarım biçimi seçebilirsiniz.','error');return}
-  const latest=safeRead();
-  if(latest.some(r=>r.topicId===fixed.id)){notice('Bu konu için bu tarayıcıdan zaten bir yanıt kaydedildi.','error');updateTopicStyles();return}
-  const id='o_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,10);
-  const record={id,topicId:fixed.id,methods};const next=[...latest,record];
-  if(!safeSave(next)){notice('Bu tarayıcıda kayıt yapılamadı. Yerel depolama izinlerini kontrol edin.','error');return}
-  rows=next;document.querySelectorAll('#methodGroups input').forEach(x=>x.checked=false);updateMethodStyles();
-  notice('Yanıtınız kaydedildi; matristeki sayılar güncellendi.','success');
-  renderMatrix();renderCharts();updateTopicStyles();setView('present');
+  if(!fixed){notice('Lütfen sabit bir konu seçin.','error');return}
+  if(!methods.length||methods.length>5){notice('Lütfen 1–5 yöntem seçin.','error');return}
+  if(myVotedTopics.has(topicId)){notice('Bu konu için bu oturumda yanıtınız zaten kaydedildi.','error');return}
+  const btn=$('submitBtn');btn.disabled=true;
+  try{
+    const result=await api('vote',{sessionToken,topicId:fixed.id,methods});
+    myVotedTopics=new Set(result.votedTopics||[...myVotedTopics,topicId]);
+    document.querySelectorAll('#methodGroups input').forEach(x=>x.checked=false);
+    updateMethodStyles();
+    notice('Öneriniz ortak veritabanına kaydedildi.','success');
+    await refreshState();
+    updateTopicStyles();setView('present');
+  }catch(err){
+    notice('Kayıt başarısız: '+err.message,'error');
+    if(err.status===401){relock();}
+  }finally{updateTopicStyles();}
 }
+
 function csvCell(s){let t=String(s??''); if(/^[\s]*[=+\-@]/.test(t)) t="'"+t; return '"'+t.replaceAll('"','""')+'"'}
 function exportCsv(){
   const header=['Modül','Sabit içerik başlığı',...GROUPS.map(g=>g.label),'Katılımcı yanıtı'];
@@ -509,36 +534,31 @@ function openResetDialog(){
 }
 function cancelResetDialog(){ $('resetDialog').close(); resetConfirmed=false; }
 async function handleReset(e){
-  e.preventDefault();
-  const btn=$('confirmResetBtn');btn.disabled=true;
-  try{
-    if(!resetConfirmed){
-      const hash=await digestText($('resetPin').value);
-      if(hash!==FACILITATOR_HASH){
-        $('resetError').textContent='Kolaylaştırıcı şifresi yanlış.';$('resetError').hidden=false;return;
-      }
-      $('resetPinStep').hidden=true;
-      $('resetCount').textContent=safeRead().length;
-      $('resetConfirmStep').hidden=false;
-      $('resetError').hidden=true;
-      $('confirmResetBtn').textContent='Evet, yerel yanıtları sıfırla';
-      resetConfirmed=true;return;
-    }
-    // Store [] (not removeItem) to avoid automatic migration from a previous version.
-    if(!safeSave([])){
-      $('resetError').textContent='Yerel kayıtlar temizlenemedi; tarayıcı depolaması engellenmiş olabilir.';
-      $('resetError').hidden=false;return;
-    }
-    rows=[]; renderMatrix(); renderCharts(); updateTopicStyles();
-    document.querySelectorAll('#methodGroups input:checked').forEach(input=>{input.checked=false});
-    updateMethodStyles(); $('resetStatus').hidden=false;
-    $('resetStatus').textContent='Bu tarayıcıdaki tüm yanıtlar sıfırlandı. Sabit konular ve diğer cihazların verileri değişmedi.';
-    cancelResetDialog(); setView('present');
-  }catch(err){
-    $('resetError').textContent='Şifre doğrulaması kullanılamıyor. Lütfen sayfayı HTTPS üzerinden açın.';
-    $('resetError').hidden=false;
-  }finally{btn.disabled=false;}
+ e.preventDefault();
+ const btn=$('confirmResetBtn');btn.disabled=true;
+ try{
+   if(!resetConfirmed){
+     if(!/^\d{4}$/.test($('resetPin').value.trim())){
+       $('resetError').textContent='Lütfen 4 haneli kolaylaştırıcı kodunu girin.';
+       $('resetError').hidden=false;return;
+     }
+     $('resetPinStep').hidden=true;
+     $('resetCount').textContent=rows.length;
+     $('resetConfirmStep').hidden=false;
+     $('resetError').hidden=true;
+     $('confirmResetBtn').textContent='Evet, tüm yanıtları sıfırla';
+     resetConfirmed=true;return;
+   }
+   await api('reset',{resetPin:$('resetPin').value.trim()});
+   relock(); rows=[]; renderMatrix();renderCharts();updateTopicStyles();
+   document.querySelectorAll('#methodGroups input:checked').forEach(input=>input.checked=false);
+   updateMethodStyles();$('resetStatus').hidden=false;
+   $('resetStatus').textContent='Tüm ortak yanıtlar silindi. Katılımcı oturumları yeniden açılmalıdır.';
+   cancelResetDialog();await refreshState();setView('present');
+ }catch(err){ $('resetError').textContent='Sıfırlama başarısız: '+err.message; $('resetError').hidden=false; }
+ finally{btn.disabled=false;}
 }
+
 $('openResetBtn').addEventListener('click',openResetDialog);
 $('closeResetBtn').addEventListener('click',cancelResetDialog);
 $('cancelResetBtn').addEventListener('click',cancelResetDialog);
@@ -555,23 +575,15 @@ $('tabCharts').addEventListener('click',()=>setView('charts'));
 $('submitBtn').addEventListener('click',submit);
 
 $('exportCsv').addEventListener('click',exportCsv);
-window.addEventListener('storage',e=>{if(e.key===STORE){rows=safeRead(); renderMatrix(); renderCharts()}});
-window.addEventListener('resize',()=>{if(view==='charts') renderCharts()});
-try{
- if(localStorage.getItem(STORE)===null){
-  const prior=localStorage.getItem(PREVIOUS_STORE);
-  if(prior){const old=JSON.parse(prior);
-   if(Array.isArray(old)){
-    const valid=old.filter(x=>x&&TOPICS.some(t=>t.id===x.topicId)&&Array.isArray(x.methods))
-     .map(x=>({id:String(x.id||'previous'),topicId:x.topicId,methods:[...new Set(x.methods.filter(m=>METHOD_LABEL[m]))].slice(0,5)}));
-    if(valid.length) safeSave(valid);
-   }
-  }
- }
-}catch(e){}
-try{authorized=sessionStorage.getItem(ACCESS_SESSION)==='true'}catch(e){authorized=false}
-updateAccess();
-rows=safeRead(); renderOptionGroups(); renderMatrix(); renderCharts(); setMod(mod); setView('participate');
+window.addEventListener('resize',()=>{if(view==='charts')renderCharts()});
+renderOptionGroups();renderMatrix();renderCharts();setMod(mod);setView('participate');
+(async()=>{
+  await restoreSession();
+  await refreshState();
+})();
+setInterval(()=>{ if(document.visibilityState==='visible')refreshState(); },5000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')refreshState()});
+
 })();
 </script>
 </body>
