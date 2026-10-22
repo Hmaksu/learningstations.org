@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071c34">
+  <meta name="description" content="Learning Stations ekosistemi: Connect ile paydaşları ve ihtiyaçları buluşturun, LS Designer ile birlikte öğrenme deneyimleri tasarlayın.">
+  <title>Learning Stations | Connect & LS Designer</title>
+  <style>
+    :root { --navy:#071d36; --navy2:#0b2848; --ink:#12223b; --muted:#627187; --teal:#067a78; --aqua:#54d6c3; --violet:#6555ce; --gold:#ffc443; --cream:#f7f8fa; --line:#e5eaf0; --white:#fff; --max:1180px; }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:102px}
+    body{margin:0;background:white;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    .container{width:min(var(--max),calc(100% - 72px));margin-inline:auto}
+    .skip{position:absolute;left:20px;top:-80px;background:white;color:var(--navy);z-index:1100;padding:10px 14px}.skip:focus{top:12px}
+    .site-header{position:sticky;top:0;z-index:1000;color:white;background:linear-gradient(105deg,#071c34,#10385d 85%,#0c2e50);box-shadow:0 5px 20px #071d361c}
+    .dark-shell{position:relative;overflow:hidden;color:white;background:linear-gradient(90deg,rgba(7,28,52,.94) 0%,rgba(7,28,52,.90) 34%,rgba(7,28,52,.80) 58%,rgba(7,28,52,.70) 100%),url("https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1800") center/cover no-repeat}
+    .dark-shell:before{content:"";position:absolute;inset:0;opacity:.17;background-image:linear-gradient(#4b769c 1px,transparent 1px),linear-gradient(90deg,#4b769c 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to right,transparent 17%,#000 100%);pointer-events:none}
+    .nav{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;min-height:86px;gap:30px;border-bottom:1px solid #ffffff1d}
+    .brand{display:flex;gap:12px;align-items:center;min-width:213px}
+    .brand-symbol{width:36px;height:36px;border-radius:11px;background:linear-gradient(145deg,#ffc64d,#ffdd8a);color:#052a49;display:grid;place-items:center;font-size:15px;letter-spacing:-.07em;font-weight:900;text-transform:lowercase;box-shadow:0 4px 16px #ffc44324}
+    .brand-label{display:block;font-size:17px;font-weight:800;letter-spacing:-.6px;line-height:1.1}
+    .brand-sub{display:block;color:#9db1c8;font-size:10px;font-weight:700;letter-spacing:1.25px;margin-top:4px}
+    .menu{display:flex;align-items:center;gap:25px;margin-left:auto}
+    .menu a{font-size:12.6px;font-weight:650;color:#c9d7e8;transition:color .2s}
+    .menu a:hover{color:white}
+    .nav-cta{display:inline-flex;align-items:center;gap:9px;background:#ffffff13;border:1px solid #ffffff35;border-radius:10px;padding:10px 15px;font-size:12.5px;font-weight:750;white-space:nowrap}
+    .nav-cta:hover{background:#ffffff25}
+    .mobile-menu{display:none;align-items:center;gap:6px;color:white;background:transparent;border:1px solid #ffffff44;padding:10px 12px;border-radius:10px}
+    .hero{position:relative;z-index:1;min-height:560px;display:flex;align-items:center;padding:68px 0 74px}.hero-copy{max-width:700px}
+    .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:10.8px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal)}
+    .eyebrow:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gold)}
+    .hero .eyebrow{color:#add7d7}
+    .hero h1{font-size:clamp(40px,4.3vw,61px);line-height:1.083;letter-spacing:-2.5px;margin:22px 0 21px;max-width:620px;font-weight:830}
+    .hero h1 em{font-style:normal;color:var(--gold)}
+    .hero p{font-size:15.5px;line-height:1.75;color:#c8d8e9;max-width:530px;margin:0 0 29px}
+    .hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+    .btn{display:inline-flex;gap:11px;align-items:center;justify-content:center;font-weight:750;font-size:13px;border-radius:11px;padding:14px 18px;transition:transform .15s,box-shadow .15s,background .15s;border:1px solid transparent;white-space:nowrap}
+    .btn:hover{transform:translateY(-2px)}
+    .btn-gold{background:var(--gold);color:#15213a;box-shadow:0 6px 20px #ffc44322}
+    .btn-outline{border-color:#7890aa;color:#fff;background:#ffffff08}
+    .btn-outline:hover{background:#ffffff16}
+    .btn-dark{background:var(--navy);color:white}
+    .btn-white{background:white;color:var(--navy);border:1px solid #e0e5eb}
+    .hero-footnote{display:flex;align-items:center;gap:10px;font-size:11px;color:#9eb4ca;margin-top:23px}
+    .hero-footnote .dot{background:#57bfae;width:6px;height:6px;border-radius:50%}
+    .scene{position:relative;isolation:isolate;width:100%;max-width:535px;margin:auto;padding:13px}
+    .scene:before{content:"";position:absolute;width:350px;height:350px;border-radius:50%;background:#2b87a666;filter:blur(76px);inset:60px auto auto 88px;z-index:-1}
+    .diagram{border:1px solid #b0d8ef3c;border-radius:21px;background:linear-gradient(145deg,#153c5d,#0c233d 80%);box-shadow:0 30px 60px #0004;overflow:hidden;padding:23px}
+    .diagram-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:17px;border-bottom:1px solid #ffffff1f}
+    .diagram-top span{font-size:11px;color:#b4d2e1;font-weight:700;letter-spacing:.25px}
+    .tiny-lights{display:flex;gap:6px}.tiny-lights i{width:6px;height:6px;border-radius:50%;background:#92c8d3;opacity:.7}
+    .diagram-title{font-size:20px;letter-spacing:-.6px;font-weight:800;margin:21px 0 20px}
+    .diagram-flow{display:grid;grid-template-columns:1fr 34px 1fr;align-items:stretch;gap:6px}
+    .diag-card{border-radius:13px;padding:14px;background:#ffffff0e;border:1px solid #ffffff24;min-height:160px}
+    .diag-card.connect{background:linear-gradient(155deg,#14666c88,#0a4654aa);border-color:#51cfc866}
+    .diag-card.designer{background:linear-gradient(155deg,#4d4d9b88,#3a396c88);border-color:#aca5ff66}
+    .diag-tag{font-size:10px;font-weight:800;color:#b0f3e8;letter-spacing:1.1px}
+    .designer .diag-tag{color:#d8d0ff}
+    .diag-card strong{display:block;font-size:15px;margin:7px 0 12px}
+    .diag-card small{font-size:10.5px;color:#d2e2ef;line-height:1.4;display:block}
+    .diag-people{display:flex;align-items:center;margin:12px 0 0}
+    .person{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;border:2px solid #124a55;margin-right:-6px;background:#c6faf0;color:#09524f;font-size:9px;font-weight:800}
+    .person:nth-child(2){background:#f5d2c0;color:#7f453e}.person:nth-child(3){background:#d7d8ff;color:#4b428b}.person:nth-child(4){background:#fad99a;color:#865008}
+    .mini-modules{display:flex;align-items:end;gap:6px;padding:10px 0}.mini-modules i{display:block;width:30px;height:34px;background:#a9a1f8;border-radius:5px}.mini-modules i:nth-child(2){height:44px;background:#e7ddff}.mini-modules i:nth-child(3){height:28px;background:#c7a7e7}
+    .diag-arrow{display:grid;place-items:center;color:#ffcf66;font-size:23px;font-weight:300}
+    .diagram-output{display:flex;align-items:center;gap:10px;border:1px solid #ffffff24;background:#ffffff0a;border-radius:12px;padding:11px 14px;margin-top:13px}
+    .pulse-icon{width:30px;height:30px;flex:0 0 auto;border-radius:9px;background:#ffc44324;display:grid;place-items:center;color:#ffc443;font-size:16px}
+    .diagram-output strong{display:block;font-size:11px}.diagram-output span{font-size:10px;color:#bdd0e0}
+    .scene-label{font-size:10px;color:#99b1c4;text-align:center;margin-top:13px}
+    .section{padding:51px 0}
+    /* Keep the principles and platform sections visually connected. */
+    .principles{padding-bottom:23px}
+    .section-header{max-width:710px;margin-bottom:27px}
+    .section-header.center{text-align:center;margin:0 auto 27px}
+    h2{font-size:clamp(28px,3.3vw,42px);letter-spacing:-1.5px;line-height:1.17;margin:9px 0 12px}
+    .lead{font-size:14.5px;line-height:1.7;color:var(--muted);margin:0}
+    .premise{background:#f4f8f9;border-bottom:1px solid #e5eff0;padding:32px 0}
+    .premise-inner{display:grid;grid-template-columns:.66fr 1.34fr;gap:64px;align-items:center}
+    .premise h2{font-size:28px;margin:7px 0 0;letter-spacing:-1px}
+    .premise p{font-size:14px;color:#41566c;margin:0;line-height:1.75}
+    .features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .feature{border:1px solid var(--line);border-radius:17px;background:white;padding:22px;min-height:146px;box-shadow:0 2px 12px #10243b04}
+    .feature-icon{width:39px;height:39px;border-radius:12px;display:grid;place-items:center;background:#eff7f6;color:#087c78;font-size:19px;margin-bottom:12px}
+    .feature:nth-child(2) .feature-icon{background:#f3f0ff;color:#6352bd}.feature:nth-child(3) .feature-icon{background:#fff6df;color:#b78005}
+    h3{margin:0 0 8px;font-size:17px;letter-spacing:-.4px;line-height:1.25}
+    .feature p{margin:0;font-size:12px;line-height:1.7;color:var(--muted)}
+    .platforms{background:white;padding-top:24px;padding-bottom:48px}
+    .platform-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch}
+    .platform{border:1px solid #e3e9ee;border-radius:22px;padding:27px;background:linear-gradient(160deg,#f6fbfa,#fff 68%);display:flex;flex-direction:column;box-shadow:0 8px 30px #0c2b4410;min-width:0}
+    .platform.purple{background:linear-gradient(160deg,#f9f7ff,#fff 68%)}
+    .platform-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .platform-index{font-size:10px;font-weight:800;letter-spacing:1.4px;color:#087c78}
+    .platform.purple .platform-index{color:#6a59c7}
+    .brand-pill{font-weight:800;color:#076f6d;border:1px solid #bce6e2;background:#eaf9f7;border-radius:999px;padding:5px 9px;font-size:10px;white-space:nowrap}
+    .platform.purple .brand-pill{color:#6555bc;background:#f0edff;border-color:#ddd5fc}
+    .platform h3{font-size:33px;letter-spacing:-1.1px;margin:13px 0 9px}
+    .platform-description{font-size:13.5px;line-height:1.68;color:#40546b;max-width:500px;margin:0 0 15px;min-height:66px}
+    .tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+    .tag{border:1px solid #dce9e9;border-radius:999px;background:white;color:#42626a;padding:6px 10px;font-size:10.5px;font-weight:700}
+    .purple .tag{border-color:#e4e0f1;color:#605b83}
+    .mock{flex:1;min-height:213px;background:#fff;border:1px solid #e0e9e9;border-radius:13px;padding:16px;margin-bottom:17px;box-shadow:0 6px 19px #122f4210}
+    .mock-header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #e8eef0;padding-bottom:12px;margin-bottom:12px}
+    .mock-header b{font-size:12.2px;color:#18394b}.mock-header span{font-size:9.5px;color:#8293a5}
+    .search-pill{background:#f6f9f9;border:1px solid #e9eeee;border-radius:8px;padding:9px 11px;font-size:10.5px;color:#8394a1;margin-bottom:10px}
+    .listing{border:1px solid #e9edee;border-radius:9px;padding:11px;display:flex;justify-content:space-between;gap:12px;margin-bottom:8px}
+    .listing:last-child{margin:0}
+    .listing b{font-size:10.8px;display:block;line-height:1.3}.listing small{font-size:9px;color:#8093a5;display:block;margin-top:5px}
+    .listing i{font-style:normal;background:#e8f8f3;color:#008272;border-radius:5px;padding:4px 6px;height:max-content;font-size:9px;white-space:nowrap}
+    .purple .mock{border-color:#e7e4f2}
+    .mini-status{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+    .mini-status span{background:#f3f1fc;border-radius:6px;padding:5px 8px;font-size:9.1px;color:#5f56a8}
+    .lesson-row{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid #edf0f3}
+    .lesson-row:last-child{border:0}
+    .lesson-index{background:#7162d1;border-radius:6px;color:white;width:28px;height:28px;display:grid;place-items:center;font-size:9.5px;font-weight:800;flex:0 0 auto}
+    .lesson-row:nth-child(3) .lesson-index{background:#9589e4}.lesson-row:nth-child(4) .lesson-index{background:#b6aeeb}
+    .lesson-copy{flex:1;min-width:0}.lesson-copy b{font-size:10.5px;display:block;line-height:1.3}.lesson-copy small{font-size:9.3px;color:#8792a4}.lesson-check{color:#55a497;font-size:13px}
+    .platform-bottom{display:flex;justify-content:space-between;align-items:center;gap:14px}
+    .platform-bottom span{font-size:10.7px;color:#657486;max-width:220px}
+    .text-link{display:inline-flex;gap:8px;align-items:center;color:#087e78;font-weight:850;font-size:13px;white-space:nowrap}
+    .purple .text-link{color:#6b57c6}
+    .text-link:hover{text-decoration:underline;text-underline-offset:4px}
+    .bridge{margin:21px 0 0;padding:15px 22px;border-radius:13px;background:#0d283e;color:#e1eaf2;display:flex;gap:16px;align-items:center;justify-content:center;text-align:center}
+    .bridge-icon{color:#facc58;font-size:23px;line-height:1}
+    .bridge p{font-size:13px;margin:0}.bridge strong{color:white}
+    .process{background:#f6f8fa;border-top:1px solid #e9edf1;border-bottom:1px solid #e9edf1}
+    .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;align-items:stretch}
+    .step{position:relative;background:white;border:1px solid #e4e9f0;border-radius:13px;padding:19px 17px;min-width:0;box-shadow:0 2px 10px #153b5505}
+    .step:not(:last-child):after{content:"→";position:absolute;right:-15px;top:37px;z-index:2;font-size:21px;font-weight:800;color:#8398a8}
+    .step-number{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#e8f4f5;color:#0b7777;font-weight:800;font-size:12px;margin-bottom:15px}
+    .step:nth-child(3) .step-number{color:#6258c1;background:#f0edff}
+    .step h3{font-size:13px;margin-bottom:8px}
+    .step p{font-size:11px;color:#68788a;margin:0;line-height:1.55}
+    .step .via{font-size:9px;color:#0d827b;text-transform:uppercase;letter-spacing:.8px;font-weight:800;margin-top:12px;display:block}
+    .step:nth-child(3) .via{color:#6e5ac9}
+    .method-grid{display:grid;grid-template-columns:.83fr 1.17fr;gap:70px;align-items:center}
+    .method-grid .section-header{margin:0}
+    .method-grid .section-header .lead{margin-bottom:19px}
+    .method-list{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .method-item{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fff;min-height:145px}
+    .method-item b{display:block;font-size:13px;margin:12px 0 7px}
+    .method-item p{margin:0;font-size:11px;line-height:1.65;color:var(--muted)}
+    .method-num{font-weight:900;font-size:12px;color:#d1aa4b}
+    .audience{background:#f8fafc}
+    .audience-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .aud-card{background:white;border:1px solid #e6ebef;border-radius:15px;padding:19px;min-height:155px}
+    .aud-emoji{font-size:25px;display:block;margin-bottom:11px}
+    .aud-card h3{font-size:14px;margin-bottom:8px}
+    .aud-card p{font-size:11px;line-height:1.65;margin:0;color:var(--muted)}
+    .bottom{padding:0 0 52px}
+    .bottom-panel{display:flex;gap:35px;justify-content:space-between;align-items:center;border-radius:20px;padding:30px 36px;background:#fff9ec;border:1px solid #f0e3c5}
+    .bottom h2{font-size:27px;margin:8px 0 10px}
+    .bottom p{font-size:12px;color:#6e6e66;max-width:570px;margin:0}
+    .bottom-actions{display:flex;gap:11px;flex-wrap:wrap;justify-content:flex-end}
+    footer{background:#071d36;color:#b8c9d8;padding:28px 0 24px}
+    .footer-top{display:flex;align-items:center;justify-content:space-between;gap:30px;padding-bottom:22px;border-bottom:1px solid #ffffff20}
+    .footer-links{display:flex;gap:20px;flex-wrap:wrap}.footer-links a{font-size:11px;color:#cbd7e3}.footer-links a:hover{color:white}
+    .footnote{display:flex;justify-content:space-between;gap:15px;padding-top:20px;color:#819bb4;font-size:10.7px}
+    .footnote a{text-decoration:underline;text-underline-offset:3px}
+    :focus-visible{outline:3px solid #f5b522;outline-offset:3px}
+    @media(max-width:960px){
+      .container{width:min(var(--max),calc(100% - 44px))}
+      .menu{gap:15px}.menu a{font-size:11.6px}.nav-cta{display:none}
+      .hero{padding:60px 0 62px}.hero h1{font-size:clamp(35px,4.6vw,49px)}
+      .diagram{padding:16px}.diag-card{padding:10px}.scene{padding:0}.diagram-title{font-size:17px}
+      .method-grid{gap:27px}
+    }
+    @media(max-width:700px){
+      html{scroll-padding-top:84px}
+      .container{width:min(var(--max),calc(100% - 34px))}
+      .nav{min-height:70px}.brand{min-width:0}.brand-label{font-size:15px}.brand-sub{font-size:9px}
+      .mobile-menu{display:flex}.menu{display:none;position:absolute;left:0;right:0;top:68px;z-index:4;border:1px solid #ffffff3b;background:#102d4b;border-radius:12px;padding:15px;box-shadow:0 12px 30px #0005}
+      .menu.open{display:flex;flex-direction:column;align-items:stretch;gap:0}.menu a{padding:12px;font-size:13px}
+      .hero{display:flex;flex-direction:column;align-items:stretch;padding:42px 0 46px;gap:18px}
+      .hero h1{letter-spacing:-1.7px;font-size:clamp(37px,9vw,49px);max-width:570px;margin:17px 0}
+      .hero p{font-size:14px}.hero-footnote{margin-top:18px}
+      .scene{max-width:510px;width:100%}.diagram{padding:18px}.diagram-title{font-size:19px}.diag-card{padding:12px}
+      .section{padding:39px 0}.section-header{margin-bottom:23px}h2{font-size:30px}.lead{font-size:13px}
+      .section.principles{padding-bottom:18px}.section.platforms{padding-top:19px;padding-bottom:36px}
+      .premise{padding:27px 0}.premise-inner{grid-template-columns:1fr;gap:11px}.premise h2{font-size:25px}
+      .features{grid-template-columns:1fr;gap:10px}.feature{display:grid;grid-template-columns:43px 1fr;column-gap:13px;padding:16px;min-height:0}.feature-icon{grid-row:span 2;margin:0}.feature h3{margin:1px 0 5px;font-size:15px}.feature p{grid-column:2}
+      .platform-grid{grid-template-columns:1fr}.platform{padding:22px}.platform h3{font-size:31px}.platform-description{min-height:0}
+      .bridge{padding:13px}.bridge p{font-size:12px}
+      .steps{grid-template-columns:1fr;gap:10px}.step{min-height:0;display:grid;grid-template-columns:42px 1fr;column-gap:12px;padding:15px}.step-number{grid-row:span 3;margin:0}.step h3{margin:1px 0 5px}.step p{grid-column:2}.step .via{grid-column:2;margin-top:7px}.step:not(:last-child):after{content:"↓";top:auto;bottom:-20px;right:50%;transform:translateX(50%)}
+      .method-grid{grid-template-columns:1fr;gap:20px}.method-list{gap:10px}.method-item{padding:17px;min-height:0}
+      .audience-cards{grid-template-columns:repeat(2,1fr);gap:10px}.aud-card{padding:18px;min-height:159px}
+      .bottom{padding-bottom:34px}.bottom-panel{flex-direction:column;align-items:stretch;gap:20px;padding:26px}.bottom-actions{justify-content:flex-start}
+      .footer-top{align-items:flex-start;flex-direction:column;gap:19px}.footnote{flex-direction:column;gap:9px}
+    }
+    @media(max-width:700px){#ls-modeli{padding-bottom:28px}.audience{padding-top:33px;padding-bottom:37px}.process{padding-top:39px;padding-bottom:39px}}
+    @media(max-width:380px){.btn{font-size:12px;padding:12px}.hero-actions{gap:8px}.diagram-flow{grid-template-columns:1fr 20px 1fr;gap:3px}.diag-card{padding:9px}.diag-card strong{font-size:13px}.diagram{padding:12px}.audience-cards{grid-template-columns:1fr}.bottom-actions{flex-direction:column;align-items:stretch}.method-list{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.btn{transition:none}}
+    /* Compact section rhythm: reduce unused whitespace without changing the content or visual language. */
+    #ls-modeli{padding-bottom:34px}
+    .audience{padding-top:40px;padding-bottom:49px}
+    .process{padding-top:47px;padding-bottom:47px}
+
+    /* Compact, always-visible Turkish / English selector, including on mobile. */
+    .nav-tools{display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .lang-switch{display:inline-flex;align-items:center;gap:3px;padding:4px;background:#ffffff12;border:1px solid #ffffff40;border-radius:11px;white-space:nowrap}
+    .lang-option{border:0;background:transparent;color:#d9e4f0;min-width:31px;padding:6px 7px;border-radius:7px;font-size:11px;line-height:1.2;font-weight:800;letter-spacing:.35px;cursor:pointer;transition:background .18s,color .18s}
+    .lang-option:hover{background:#ffffff23;color:white}
+    .lang-option.is-active{background:#ffc443;color:#0a2643;box-shadow:0 1px 5px #0002}
+    .lang-separator{height:15px;width:1px;background:#ffffff40}
+    html[lang="en"] .brand-sub{font-size:9px;letter-spacing:.7px;line-height:1.15;max-width:220px}
+    @media(max-width:1100px){.nav{gap:15px}.menu{gap:15px}.nav-tools{gap:8px}}
+    @media(max-width:960px){.nav-tools .nav-cta{display:none}}
+    @media(max-width:700px){.nav{gap:8px}.nav-tools{gap:7px}.lang-switch{padding:3px}.lang-option{min-width:27px;padding:5px 5px}.mobile-menu{padding:9px 10px;font-size:12px}html[lang="en"] .brand-sub{max-width:168px;font-size:7.5px;letter-spacing:.45px}}
+    @media(max-width:390px){.nav-tools{gap:5px}.brand{gap:8px}.brand-symbol{width:32px;height:32px;flex-shrink:0}.brand-label{font-size:13px}.brand-sub{font-size:8px;letter-spacing:.4px}html[lang="en"] .brand-sub{max-width:140px;font-size:7px;letter-spacing:.2px}}
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Ana içeriğe geç</a>
+  <div class="site-header">
+    <header class="container nav">
+      <a class="brand" href="#ust" aria-label="Learning Stations ana sayfa">
+        <span class="brand-symbol" aria-hidden="true">ls</span>
+        <span><span class="brand-label">learningstations<span style="color:#ffc443">.</span></span></span>
+      </a>
+      <nav class="menu" id="menu" aria-label="Ana menü">
+        <a href="#yaklasim">Yaklaşımımız</a>
+        <a href="#platformlar">Dijital araçlar</a>
+        <a href="#surec">Nasıl çalışır?</a>
+        <a href="#kimler-icin">Kimler için?</a>
+      </nav>
+      <div class="nav-tools">
+        <a class="nav-cta" href="#platformlar">Platformlara geç <span aria-hidden="true">↗</span></a>
+        <div class="lang-switch" role="group" aria-label="Dil seçimi" id="langSwitch">
+          <button class="lang-option is-active" id="langTr" type="button" data-lang="tr" aria-pressed="true" title="Türkçe göster">TR</button>
+          <span class="lang-separator" aria-hidden="true"></span>
+          <button class="lang-option" id="langEn" type="button" data-lang="en" aria-pressed="false" title="İngilizce göster">EN</button>
+        </div>
+        <button class="mobile-menu" id="menuButton" aria-expanded="false" aria-controls="menu" type="button">Menü ☰</button>
+      </div>
+    </header>
+  </div>
+  <div class="dark-shell">
+    <div class="container hero" id="ust">
+      <div class="hero-copy">
+        <span class="eyebrow">Ortak bilgi · Ortak öğrenme · Ortak etki</span>
+        <h1>Birlikte tasarla.<br>Birlikte öğren.<br><em>Birlikte değer üret.</em></h1>
+        <p>İhtiyaçları, insanları ve bilgiyi bir araya getiriyoruz. <strong style="color:white">Connect</strong> ile iş birliğinin kapısını açıyor, <strong style="color:white">LS Designer</strong> ile bu iş birliğini nitelikli öğrenme deneyimlerine dönüştürüyoruz.</p>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="https://connect.learningstations.org/" target="_blank" rel="noopener noreferrer">Connect'e geç <span aria-hidden="true">↗</span></a>
+          <a class="btn btn-outline" href="https://designer.learningstations.org/" target="_blank" rel="noopener noreferrer">LS Designer'a geç <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="hero-footnote"><span class="dot" aria-hidden="true"></span><span>Eğitim, araştırma ve toplumsal katkı arasında yeni bağlar kuran bir yaklaşım.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <main id="main">
+    <section class="premise" id="yaklasim">
+      <div class="container premise-inner">
+        <div><span class="eyebrow">Neden Learning Stations?</span><h2>Bir dersin ötesinde, <br>birlikte öğrenme ekosistemi.</h2></div>
+        <p>Günümüzün karmaşık sorunları tek bir disiplinin ya da kurumun bilgisiyle çözülemiyor. Learning Stations yaklaşımı; akademiyi, öğrencileri, mezunları, kamu kurumlarını ve sektörü ortak ihtiyaçlar etrafında buluşturarak bilgiyi paylaşılabilir, uygulanabilir ve geliştirilebilir öğrenme deneyimlerine dönüştürmeyi amaçlar.</p>
+      </div>
+    </section>
+
+    <section class="section principles" aria-labelledby="what-title">
+      <div class="container">
+        <div class="section-header center"><span class="eyebrow">Üç temel ilke</span><h2 id="what-title">Bağ kur. Birlikte üret. Yaygınlaştır.</h2><p class="lead">Kişiler, disiplinler ve kurumlar arasında dolaşabilen bir öğrenme mimarisi.</p></div>
+        <div class="features">
+          <article class="feature"><span class="feature-icon" aria-hidden="true">◎</span><h3>İnsanları ve ihtiyaçları buluştur</h3><p>Gerçek sorunları görünür kıl; katkı sunabilecek paydaşlar ve uzmanlıklar arasında bağ kur.</p></article>
+          <article class="feature"><span class="feature-icon" aria-hidden="true">▦</span><h3>Bilgiyi birlikte tasarla</h3><p>Öğrenmeyi yalnızca içerik aktarımı değil, aktif katılım ve ortak üretim süreci olarak kurgula.</p></article>
+          <article class="feature"><span class="feature-icon" aria-hidden="true">↗</span><h3>Çıktıları yeniden kullan</h3><p>Modüler öğrenme deneyimlerini farklı derslere, programlara ve yaşam boyu öğrenme bağlamlarına uyarla.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section platforms" id="platformlar">
+      <div class="container">
+        <div class="section-header"><span class="eyebrow">İki tamamlayıcı dijital araç</span><h2>İhtiyacınıza uygun yerden başlayın.</h2><p class="lead">İster bir ortak arıyor olun ister öğrenme deneyimi tasarlayın; ekosisteme katılmak için iki kapınız var.</p></div>
+        <div class="platform-grid">
+          <article class="platform">
+            <div class="platform-top"><span class="platform-index">01 / İŞ BİRLİĞİ & KİTLE KAYNAK</span><span class="brand-pill">Paydaş ekosistemi</span></div>
+            <h3>Connect<span style="color:#10a59a">.</span></h3>
+            <p class="platform-description">İhtiyaçları, fikirleri ve uzmanlıkları aynı zeminde buluşturur. Farklı kurum ve toplulukların ortak projeler, öğrenme fırsatları ve çözümler geliştirmesini destekler.</p>
+            <div class="tags"><span class="tag">Topluluklar ve etkinlikler</span><span class="tag">Paydaş ve uzmanlık keşfi</span><span class="tag">İhtiyaç ve fikir çağrıları</span><span class="tag">Ortak proje fırsatları</span><span class="tag">Birlikte öğrenme</span></div>
+            <div class="mock" aria-label="Connect için temsili iş birliği arayüzü">
+              <div class="mock-header"><b>Ortak çalışma alanı</b><span>ÖRNEK GÖSTERİM</span></div>
+              <div class="search-pill">⌕ &nbsp; Uzmanlık, topluluk veya ihtiyaç ara...</div>
+              <div class="listing"><div><b>Afete hazırlık ve yerel dayanıklılık</b><small>İhtiyaç · farklı disiplinlerden katılım</small></div><i>İş birliği</i></div>
+              <div class="listing"><div><b>Yapay zekânın sorumlu kullanımı</b><small>Ortak tema · öğrenme deneyimi önerisi</small></div><i>Ortak tasarım</i></div>
+            </div>
+            <div class="platform-bottom"><span>İnsanları ve fırsatları keşfetmek isteyenler için.</span><a class="text-link" href="https://connect.learningstations.org/" target="_blank" rel="noopener noreferrer">Connect'i aç <span aria-hidden="true">↗</span></a></div>
+          </article>
+          <article class="platform purple">
+            <div class="platform-top"><span class="platform-index">02 / ÖĞRENME TASARIMI</span><span class="brand-pill">Modüler öğrenme</span></div>
+            <h3>LS Designer<span style="color:#9a89e8">.</span></h3>
+            <p class="platform-description">Bir konuyu, sorunu veya yetkinlik ihtiyacını yapılandırılmış bir Öğrenme İstasyonuna dönüştürür. Amaç, yöntem, etkinlik ve değerlendirme bileşenlerini modüler biçimde tasarlamaya yardımcı olur.</p>
+            <div class="tags"><span class="tag">Hedefler ve yetkinlikler</span><span class="tag">Modül tasarımı</span><span class="tag">Yöntem ve etkinlikler</span><span class="tag">Ölçme ve değerlendirme</span><span class="tag">Ders ve program ilişkileri</span></div>
+            <div class="mock" aria-label="LS Designer için temsili modül planlama arayüzü">
+              <div class="mock-header"><b>Öğrenme İstasyonu taslağı</b><span>ÖRNEK GÖSTERİM</span></div>
+              <div class="mini-status"><span>Hedefler</span><span>Yetkinlikler</span><span>Öğrenme modülleri</span><span>Kanıt</span></div>
+              <div class="lesson-row"><span class="lesson-index">M1</span><div class="lesson-copy"><b>Sorunu ve bağlamı anlamlandır</b><small>Problem tanımı · paydaş analizi</small></div><span class="lesson-check">✓</span></div>
+              <div class="lesson-row"><span class="lesson-index">M2</span><div class="lesson-copy"><b>Kanıtları değerlendir</b><small>Veri · eleştirel düşünme · araçlar</small></div><span class="lesson-check">✓</span></div>
+              <div class="lesson-row"><span class="lesson-index">M3</span><div class="lesson-copy"><b>Alternatif üret ve çözüm geliştir</b><small>İş birliği · yaratıcı uygulama</small></div><span class="lesson-check">✓</span></div>
+            </div>
+            <div class="platform-bottom"><span>Öğrenme deneyimi tasarlamak isteyenler için.</span><a class="text-link" href="https://designer.learningstations.org/" target="_blank" rel="noopener noreferrer">LS Designer'ı aç <span aria-hidden="true">↗</span></a></div>
+          </article>
+        </div>
+        <div class="bridge"><span class="bridge-icon" aria-hidden="true">↔</span><p><strong>Connect</strong> doğru soruları ve insanları buluşturur. <strong>LS Designer</strong> bu birlikteliği öğrenme deneyimine dönüştürmenize yardımcı olur.</p></div>
+      </div>
+    </section>
+
+    <section class="section process" id="surec">
+      <div class="container">
+        <div class="section-header center"><span class="eyebrow">Birlikte yaratımın yolculuğu</span><h2>Bir ihtiyaç nasıl öğrenme deneyimine dönüşür?</h2><p class="lead">Süreç tek bir dersten başlamaz; gerçek bir problemden ya da gelişim ihtiyacından başlar.</p></div>
+        <div class="steps">
+          <article class="step"><span class="step-number">01</span><h3>İhtiyacı tanımla</h3><p>Çözülmesi gereken sorunu, hedef kitleyi ve beklenen değişimi belirle.</p><span class="via">Başlangıç</span></article>
+          <article class="step"><span class="step-number">02</span><h3>Paydaşları buluştur</h3><p>Farklı bilgi, deneyim ve kaynakları ortak amaç etrafında bir araya getir.</p><span class="via">Connect</span></article>
+          <article class="step"><span class="step-number">03</span><h3>Öğrenmeyi tasarla</h3><p>Yetkinlikleri, öğrenme çıktılarını, modülleri ve etkinlikleri yapılandır.</p><span class="via">LS Designer</span></article>
+          <article class="step"><span class="step-number">04</span><h3>Uygula ve değerlendir</h3><p>Katılımcılarla öğrenme deneyimini yürüt; ortaya çıkan ürünleri ve kanıtları incele.</p><span class="via">Öğrenme süreci</span></article>
+          <article class="step"><span class="step-number">05</span><h3>Paylaş ve geliştir</h3><p>Edinilen bilgiyi yeni bağlamlarda kullan; yeni ihtiyaçlarla döngüyü sürdür.</p><span class="via">Sürekli gelişim</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="ls-modeli">
+      <div class="container method-grid">
+        <div class="section-header"><span class="eyebrow">Modelin özü</span><h2>Öğrenme İstasyonu yalnızca bir ders değildir.</h2><p class="lead">Learning Station (LS), farklı disiplinlerde ve ortamlarda kullanılabilen, amaçları ve çıktıları tanımlı bir öğrenme deneyimi tasarım modelidir. Bilgiyi, becerileri, araçları ve etkileşim biçimlerini anlamlı modüllerde buluşturur.</p><a class="btn btn-dark" href="https://polen.itu.edu.tr/items/885d18fb-c6c0-4d0e-87d6-bd36b1781937" target="_blank" rel="noopener noreferrer">LS Tasarım Rehberini incele <span aria-hidden="true">↗</span></a></div>
+        <div class="method-list">
+          <article class="method-item"><span class="method-num">01 / NEDEN?</span><b>Amaçlar ve yetkinlikler</b><p>Katılımcının hangi problemi çözebileceğini ve hangi bilgi-becerileri geliştireceğini tanımlar.</p></article>
+          <article class="method-item"><span class="method-num">02 / NE?</span><b>Modüler öğrenme deneyimi</b><p>Birbiriyle ilişkili fakat gerektiğinde yeniden kullanılabilen öğrenme modülleri kurar.</p></article>
+          <article class="method-item"><span class="method-num">03 / NASIL?</span><b>Yöntemler ve araçlar</b><p>Aktif öğrenme, gerçek problemler, dijital araçlar ve birlikte üretim yollarını birleştirir.</p></article>
+          <article class="method-item"><span class="method-num">04 / HANGİ KANIT?</span><b>Çıktılar ve değerlendirme</b><p>Öğrenmenin ürünlerini, performansı ve gelişimi görünür ve değerlendirilebilir kılar.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section audience" id="kimler-icin">
+      <div class="container">
+        <div class="section-header center"><span class="eyebrow">Kapsayıcı bir ekosistem</span><h2>Kimler için?</h2><p class="lead">Bilgi üretmek, öğrenmek, öğretmek veya ortak çözümler geliştirmek isteyen herkes için.</p></div>
+        <div class="audience-cards">
+          <article class="aud-card"><span class="aud-emoji" aria-hidden="true">◈</span><h3>Eğitmenler ve tasarımcılar</h3><p>Derslerini, atölyelerini ve gelişim programlarını aktif ve modüler öğrenme deneyimlerine dönüştürür.</p></article>
+          <article class="aud-card"><span class="aud-emoji" aria-hidden="true">◉</span><h3>Öğrenciler ve öğrenenler</h3><p>Gerçek problemlere katkı sunar; yalnızca bilgi edinmez, çözüm ve öğrenme çıktısı üretir.</p></article>
+          <article class="aud-card"><span class="aud-emoji" aria-hidden="true">✳</span><h3>Araştırmacılar ve üniversiteler</h3><p>Araştırma bilgisini paylaşılabilir deneyimlere taşır; disiplinlerarası iş birliklerini güçlendirir.</p></article>
+          <article class="aud-card"><span class="aud-emoji" aria-hidden="true">⌘</span><h3>Özel sektör, kamu ve toplum</h3><p>İhtiyaçlarını ve uzmanlıklarını paylaşır; ortak öğrenme ve yenilik süreçlerinde yer alır.</p></article>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="bottom" id="kaynaklar">
+      <div class="container bottom-panel">
+        <div><span class="eyebrow">Başlamaya hazır mısınız?</span><h2>İlk adımı atın. Birlikte geliştirelim.</h2><p>Bir ihtiyaç veya iş birliği fikriyle Connect'e katılın ya da kendi Öğrenme İstasyonunuzu tasarlamak için LS Designer'ı açın. Modeli yakından incelemek için İTÜ Yayınevi'nden yayımlanan rehbere ulaşın.</p></div>
+        <div class="bottom-actions"><a class="btn btn-gold" href="https://connect.learningstations.org/" target="_blank" rel="noopener noreferrer">Connect ↗</a><a class="btn btn-dark" href="https://designer.learningstations.org/" target="_blank" rel="noopener noreferrer">LS Designer ↗</a><a class="btn btn-white" href="https://polen.itu.edu.tr/items/885d18fb-c6c0-4d0e-87d6-bd36b1781937" target="_blank" rel="noopener noreferrer">Rehberi oku ↗</a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="container"><div class="footer-top"><a class="brand" href="#ust"><span class="brand-symbol" aria-hidden="true">ls</span><span><span class="brand-label">learningstations<span style="color:#ffc443">.</span></span></span></a><div class="footer-links"><a href="#yaklasim">Yaklaşım</a><a href="#platformlar">Dijital araçlar</a><a href="https://mukemmeliyet.itu.edu.tr/" target="_blank" rel="noopener noreferrer">İTÜ MEM ↗</a><a href="https://polen.itu.edu.tr/items/885d18fb-c6c0-4d0e-87d6-bd36b1781937" target="_blank" rel="noopener noreferrer">Tasarım Rehberi ↗</a></div></div><div class="footnote"><span>Connect ve LS Designer için landing page taslağı · Tanıtım amaçlı kavramsal arayüzler</span></div></div></footer>
+
+  <script>
+    (function(){
+      'use strict';
+      var englishText = {
+  "Ana içeriğe geç": "Skip to main content",
+    "Yaklaşımımız": "Our approach",
+  "Dijital araçlar": "Digital tools",
+  "Nasıl çalışır?": "How it works",
+  "Kimler için?": "Who it is for",
+  "Platformlara geç": "Explore the platforms",
+  "Menü ☰": "Menu ☰",
+  "Ortak bilgi · Ortak öğrenme · Ortak etki": "Shared knowledge · Shared learning · Collective impact",
+  "Birlikte tasarla.": "Design together.",
+  "Birlikte öğren.": "Learn together.",
+  "Birlikte değer üret.": "Create value together.",
+  "İhtiyaçları, insanları ve bilgiyi bir araya getiriyoruz.": "We bring needs, people and knowledge together.",
+  "ile iş birliğinin kapısını açıyor,": "opens the door to collaboration, while",
+  "ile bu iş birliğini nitelikli öğrenme deneyimlerine dönüştürüyoruz.": "turns that collaboration into meaningful learning experiences.",
+  "Connect'e geç": "Go to Connect",
+  "LS Designer'a geç": "Go to LS Designer",
+  "Eğitim, araştırma ve toplumsal katkı arasında yeni bağlar kuran bir yaklaşım.": "An approach that builds new connections between education, research and societal engagement.",
+  "LEARNING STATIONS / EKOSİSTEM": "LEARNING STATIONS / ECOSYSTEM",
+  "Bir ihtiyaçtan ortak öğrenmeye": "From a shared need to collaborative learning",
+  "01 / BULUŞTUR": "01 / CONNECT",
+  "İhtiyaçlar · uzmanlıklar · paydaşlar": "Needs · expertise · stakeholders",
+  "02 / TASARLA": "02 / DESIGN",
+  "Hedefler · modüller · yöntemler": "Objectives · modules · methods",
+  "Birlikte üretilen öğrenme deneyimleri": "Co-created learning experiences",
+  "Yetkinlikler · öğrenme çıktıları · yeniden kullanım": "Competencies · learning outcomes · reuse",
+  "Ekosistemin işleyişini anlatan kavramsal gösterim": "Conceptual illustration of how the ecosystem works",
+  "Neden Learning Stations?": "Why Learning Stations?",
+  "Bir dersin ötesinde,": "Beyond a single course,",
+  "birlikte öğrenme ekosistemi.": "a collaborative learning ecosystem.",
+  "Günümüzün karmaşık sorunları tek bir disiplinin ya da kurumun bilgisiyle çözülemiyor. Learning Stations yaklaşımı; akademiyi, öğrencileri, mezunları, kamu kurumlarını ve sektörü ortak ihtiyaçlar etrafında buluşturarak bilgiyi paylaşılabilir, uygulanabilir ve geliştirilebilir öğrenme deneyimlerine dönüştürmeyi amaçlar.": "Today’s complex challenges cannot be addressed by any single discipline or institution. The Learning Stations approach brings together academia, students, alumni, public-sector organisations and industry around shared needs, turning knowledge into learning experiences that can be shared, applied and continuously improved.",
+  "Üç temel ilke": "Three guiding principles",
+  "Bağ kur. Birlikte üret. Yaygınlaştır.": "Connect. Co-create. Scale up.",
+  "Kişiler, disiplinler ve kurumlar arasında dolaşabilen bir öğrenme mimarisi.": "A learning architecture that crosses boundaries between people, disciplines and institutions.",
+  "İnsanları ve ihtiyaçları buluştur": "Connect people with needs",
+  "Gerçek sorunları görünür kıl; katkı sunabilecek paydaşlar ve uzmanlıklar arasında bağ kur.": "Make real-world challenges visible and connect them with people and expertise that can contribute.",
+  "Bilgiyi birlikte tasarla": "Co-create knowledge",
+  "Öğrenmeyi yalnızca içerik aktarımı değil, aktif katılım ve ortak üretim süreci olarak kurgula.": "Design learning as a process of active participation and co-creation, rather than simply delivering content.",
+  "Çıktıları yeniden kullan": "Reuse and adapt outcomes",
+  "Modüler öğrenme deneyimlerini farklı derslere, programlara ve yaşam boyu öğrenme bağlamlarına uyarla.": "Adapt modular learning experiences across courses, programmes and lifelong learning contexts.",
+  "İki tamamlayıcı dijital araç": "Two complementary digital tools",
+  "İhtiyacınıza uygun yerden başlayın.": "Start where it makes sense for you.",
+  "İster bir ortak arıyor olun ister öğrenme deneyimi tasarlayın; ekosisteme katılmak için iki kapınız var.": "Whether you are seeking collaborators or designing a learning experience, there are two ways to enter the ecosystem.",
+  "01 / İŞ BİRLİĞİ & KİTLE KAYNAK": "01 / COLLABORATION & CROWDSOURCING",
+  "Paydaş ekosistemi": "Stakeholder ecosystem",
+  "İhtiyaçları, fikirleri ve uzmanlıkları aynı zeminde buluşturur. Farklı kurum ve toplulukların ortak projeler, öğrenme fırsatları ve çözümler geliştirmesini destekler.": "Connect brings needs, ideas and expertise into a shared space. It enables people from different organisations and communities to develop joint projects, learning opportunities and solutions.",
+  "Topluluklar ve etkinlikler": "Communities and events",
+  "Paydaş ve uzmanlık keşfi": "Discover stakeholders and expertise",
+  "İhtiyaç ve fikir çağrıları": "Calls for needs and ideas",
+  "Ortak proje fırsatları": "Joint project opportunities",
+  "Birlikte öğrenme": "Collaborative learning",
+  "Ortak çalışma alanı": "Collaborative workspace",
+  "ÖRNEK GÖSTERİM": "ILLUSTRATIVE VIEW",
+  "⌕ Uzmanlık, topluluk veya ihtiyaç ara...": "⌕ Search expertise, communities or needs...",
+  "Afete hazırlık ve yerel dayanıklılık": "Disaster preparedness and local resilience",
+  "İhtiyaç · farklı disiplinlerden katılım": "Need · interdisciplinary participation",
+  "İş birliği": "Collaboration",
+  "Yapay zekânın sorumlu kullanımı": "Responsible use of AI",
+  "Ortak tema · öğrenme deneyimi önerisi": "Shared theme · proposed learning experience",
+  "Ortak tasarım": "Co-design",
+  "İnsanları ve fırsatları keşfetmek isteyenler için.": "For those seeking people, expertise and opportunities.",
+  "Connect'i aç": "Open Connect",
+  "02 / ÖĞRENME TASARIMI": "02 / LEARNING DESIGN",
+  "Modüler öğrenme": "Modular learning",
+  "Bir konuyu, sorunu veya yetkinlik ihtiyacını yapılandırılmış bir Öğrenme İstasyonuna dönüştürür. Amaç, yöntem, etkinlik ve değerlendirme bileşenlerini modüler biçimde tasarlamaya yardımcı olur.": "LS Designer turns a topic, challenge or competency need into a structured Learning Station. It helps you design learning objectives, methods, activities and assessment as interconnected modules.",
+  "Hedefler ve yetkinlikler": "Objectives and competencies",
+  "Modül tasarımı": "Module design",
+  "Yöntem ve etkinlikler": "Methods and activities",
+  "Ölçme ve değerlendirme": "Assessment and evaluation",
+  "Ders ve program ilişkileri": "Course and programme alignment",
+  "Öğrenme İstasyonu taslağı": "Learning Station draft",
+  "Hedefler": "Objectives",
+  "Yetkinlikler": "Competencies",
+  "Öğrenme modülleri": "Learning modules",
+  "Kanıt": "Evidence",
+  "Sorunu ve bağlamı anlamlandır": "Understand the challenge and its context",
+  "Problem tanımı · paydaş analizi": "Problem framing · stakeholder analysis",
+  "Kanıtları değerlendir": "Evaluate the evidence",
+  "Veri · eleştirel düşünme · araçlar": "Data · critical thinking · tools",
+  "Alternatif üret ve çözüm geliştir": "Explore alternatives and develop solutions",
+  "İş birliği · yaratıcı uygulama": "Collaboration · creative application",
+  "Öğrenme deneyimi tasarlamak isteyenler için.": "For those designing learning experiences.",
+  "LS Designer'ı aç": "Open LS Designer",
+  "doğru soruları ve insanları buluşturur.": "brings the right questions and people together.",
+  "bu birlikteliği öğrenme deneyimine dönüştürmenize yardımcı olur.": "helps turn that collaboration into a learning experience.",
+  "Birlikte yaratımın yolculuğu": "The co-creation journey",
+  "Bir ihtiyaç nasıl öğrenme deneyimine dönüşür?": "How does a need become a learning experience?",
+  "Süreç tek bir dersten başlamaz; gerçek bir problemden ya da gelişim ihtiyacından başlar.": "The process does not have to begin with a course. It begins with a real-world challenge or development need.",
+  "İhtiyacı tanımla": "Define the need",
+  "Çözülmesi gereken sorunu, hedef kitleyi ve beklenen değişimi belirle.": "Identify the challenge, the target audience and the intended change.",
+  "Başlangıç": "Starting point",
+  "Paydaşları buluştur": "Bring stakeholders together",
+  "Farklı bilgi, deneyim ve kaynakları ortak amaç etrafında bir araya getir.": "Bring diverse knowledge, experience and resources together around a shared purpose.",
+  "Öğrenmeyi tasarla": "Design the learning experience",
+  "Yetkinlikleri, öğrenme çıktılarını, modülleri ve etkinlikleri yapılandır.": "Structure the competencies, learning outcomes, modules and activities.",
+  "Uygula ve değerlendir": "Implement and evaluate",
+  "Katılımcılarla öğrenme deneyimini yürüt; ortaya çıkan ürünleri ve kanıtları incele.": "Facilitate the learning experience and examine the outputs and evidence of learning.",
+  "Öğrenme süreci": "Learning process",
+  "Paylaş ve geliştir": "Share and improve",
+  "Edinilen bilgiyi yeni bağlamlarda kullan; yeni ihtiyaçlarla döngüyü sürdür.": "Apply what has been learned in new contexts and keep the cycle moving through emerging needs.",
+  "Sürekli gelişim": "Continuous improvement",
+  "Modelin özü": "The model at a glance",
+  "Öğrenme İstasyonu yalnızca bir ders değildir.": "A Learning Station is more than a course.",
+  "Learning Station (LS), farklı disiplinlerde ve ortamlarda kullanılabilen, amaçları ve çıktıları tanımlı bir öğrenme deneyimi tasarım modelidir. Bilgiyi, becerileri, araçları ve etkileşim biçimlerini anlamlı modüllerde buluşturur.": "A Learning Station (LS) is a learning-experience design model with clearly defined objectives and outcomes, adaptable across disciplines and settings. It brings together knowledge, skills, tools and modes of interaction in purposeful modules.",
+  "LS Tasarım Rehberini incele": "Explore the LS Design Guide",
+  "01 / NEDEN?": "01 / WHY?",
+  "Amaçlar ve yetkinlikler": "Objectives and competencies",
+  "Katılımcının hangi problemi çözebileceğini ve hangi bilgi-becerileri geliştireceğini tanımlar.": "Clarifies which challenges learners will be able to address and which knowledge and skills they will develop.",
+  "02 / NE?": "02 / WHAT?",
+  "Modüler öğrenme deneyimi": "Modular learning experience",
+  "Birbiriyle ilişkili fakat gerektiğinde yeniden kullanılabilen öğrenme modülleri kurar.": "Organises learning into connected modules that can also be reused independently when needed.",
+  "03 / NASIL?": "03 / HOW?",
+  "Yöntemler ve araçlar": "Methods and tools",
+  "Aktif öğrenme, gerçek problemler, dijital araçlar ve birlikte üretim yollarını birleştirir.": "Combines active learning, real-world challenges, digital tools and collaborative ways of working.",
+  "04 / HANGİ KANIT?": "04 / WHAT EVIDENCE?",
+  "Çıktılar ve değerlendirme": "Learning outputs and assessment",
+  "Öğrenmenin ürünlerini, performansı ve gelişimi görünür ve değerlendirilebilir kılar.": "Makes learning outputs, performance and progress visible and assessable.",
+  "Kapsayıcı bir ekosistem": "An inclusive ecosystem",
+  "Bilgi üretmek, öğrenmek, öğretmek veya ortak çözümler geliştirmek isteyen herkes için.": "For everyone who wants to create knowledge, learn, teach or develop solutions together.",
+  "Eğitmenler ve tasarımcılar": "Educators and learning designers",
+  "Derslerini, atölyelerini ve gelişim programlarını aktif ve modüler öğrenme deneyimlerine dönüştürür.": "Turn courses, workshops and professional development programmes into active, modular learning experiences.",
+  "Öğrenciler ve öğrenenler": "Students and learners",
+  "Gerçek problemlere katkı sunar; yalnızca bilgi edinmez, çözüm ve öğrenme çıktısı üretir.": "Contribute to real-world challenges, moving beyond acquiring knowledge to creating solutions and tangible learning outcomes.",
+  "Araştırmacılar ve üniversiteler": "Researchers and universities",
+  "Araştırma bilgisini paylaşılabilir deneyimlere taşır; disiplinlerarası iş birliklerini güçlendirir.": "Translate research knowledge into shareable learning experiences and strengthen interdisciplinary collaboration.",
+  "Özel sektör, kamu ve toplum": "Private sector, public sector and society",
+  "İhtiyaçlarını ve uzmanlıklarını paylaşır; ortak öğrenme ve yenilik süreçlerinde yer alır.": "Contribute their needs and expertise and take part in collaborative learning and innovation.",
+  "Başlamaya hazır mısınız?": "Ready to get started?",
+  "İlk adımı atın. Birlikte geliştirelim.": "Take the first step. Let’s build it together.",
+  "Bir ihtiyaç veya iş birliği fikriyle Connect'e katılın ya da kendi Öğrenme İstasyonunuzu tasarlamak için LS Designer'ı açın. Modeli yakından incelemek için İTÜ Yayınevi'nden yayımlanan rehbere ulaşın.": "Join Connect with a need or an idea for collaboration, or open LS Designer to design your own Learning Station. To explore the model in depth, consult the guide published by ITU Press.",
+  "Rehberi oku ↗": "Read the guide ↗",
+  "Yaklaşım": "Approach",
+  "İTÜ MEM ↗": "ITU CEE ↗",
+  "Tasarım Rehberi ↗": "Design Guide ↗",
+  "Connect ve LS Designer için landing page taslağı · Tanıtım amaçlı kavramsal arayüzler": "Landing page concept for Connect and LS Designer · Illustrative interfaces for demonstration purposes"
+};
+      var englishAttributes = {
+  "Learning Stations ana sayfa": "Learning Stations homepage",
+  "Ana menü": "Main navigation",
+  "Connect ile paydaşların ve ihtiyaçların buluşması, LS Designer ile öğrenme modüllerinin tasarlanması ve çıktılar üretilmesini gösteren kavramsal görsel": "Conceptual diagram showing how Connect brings stakeholders and needs together and how LS Designer helps design learning modules and generate outcomes",
+  "Connect için temsili iş birliği arayüzü": "Illustrative collaboration interface for Connect",
+  "LS Designer için temsili modül planlama arayüzü": "Illustrative module planning interface for LS Designer",
+  "Learning Stations ekosistemi: Connect ile paydaşları ve ihtiyaçları buluşturun, LS Designer ile birlikte öğrenme deneyimleri tasarlayın.": "The Learning Stations ecosystem: connect needs, people and expertise through Connect, and co-design meaningful learning experiences with LS Designer.",
+  "Dil seçimi": "Language selection",
+  "Türkçe göster": "View in Turkish",
+  "İngilizce göster": "View in English"
+};
+      var texts = [];
+      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      var node;
+      function key(s){return s.replace(/\s+/g,' ').trim();}
+      while ((node = walker.nextNode())) {
+        if (!node.parentElement || node.parentElement.closest('script,style') || !key(node.nodeValue)) continue;
+        var source = node.nodeValue, k = key(source);
+        if (Object.prototype.hasOwnProperty.call(englishText,k)) {
+          texts.push({node:node, original:source, translated:englishText[k]});
+        }
+      }
+      var attrs=[];
+      document.querySelectorAll('[aria-label],[title]').forEach(function(el){
+        ['aria-label','title'].forEach(function(a){
+          var val=el.getAttribute(a);
+          if(val && Object.prototype.hasOwnProperty.call(englishAttributes,val)){
+            attrs.push({el:el,attribute:a,original:val,translated:englishAttributes[val]});
+          }
+        });
+      });
+      var meta=document.querySelector('meta[name="description"]');
+      if(meta){var d=meta.getAttribute('content');if(englishAttributes[d])attrs.push({el:meta,attribute:'content',original:d,translated:englishAttributes[d]});}
+      var menuButton=document.getElementById('menuButton');
+      var menu=document.getElementById('menu');
+      function readStoredLanguage(){try{return localStorage.getItem('learningstations-language');}catch(e){return null;}}
+      function storeLanguage(lang){try{localStorage.setItem('learningstations-language',lang);}catch(e){}}
+      function updateMenuButton(lang){
+        var open=menu.classList.contains('open');
+        menuButton.textContent=lang==='en'?(open?'Close ×':'Menu ☰'):(open?'Kapat ×':'Menü ☰');
+      }
+      function setLanguage(lang){
+        if(lang!=='en'&&lang!=='tr') lang='tr';
+        document.documentElement.lang=lang;
+        texts.forEach(function(item){
+          if(lang==='tr'){item.node.nodeValue=item.original;return;}
+          var m=item.original.match(/^(\s*)([\s\S]*?)(\s*)$/);
+          item.node.nodeValue=m[1]+item.translated+m[3];
+        });
+        attrs.forEach(function(item){item.el.setAttribute(item.attribute,lang==='en'?item.translated:item.original);});
+        document.querySelectorAll('.lang-option').forEach(function(btn){
+          var active=btn.dataset.lang===lang;
+          btn.classList.toggle('is-active',active);
+          btn.setAttribute('aria-pressed',String(active));
+        });
+        document.getElementById('langSwitch').setAttribute('aria-label',lang==='en'?'Language selection':'Dil seçimi');
+        updateMenuButton(lang);
+        storeLanguage(lang);
+      }
+      menuButton.addEventListener('click',function(){
+        var open=menu.classList.toggle('open');
+        menuButton.setAttribute('aria-expanded',String(open));
+        updateMenuButton(document.documentElement.lang);
+      });
+      menu.querySelectorAll('a').forEach(function(link){
+        link.addEventListener('click',function(){
+          menu.classList.remove('open');
+          menuButton.setAttribute('aria-expanded','false');
+          updateMenuButton(document.documentElement.lang);
+        });
+      });
+      document.querySelectorAll('.lang-option').forEach(function(btn){
+        btn.addEventListener('click',function(){setLanguage(btn.dataset.lang);});
+      });
+      var requested=null;
+      try{requested=new URLSearchParams(window.location.search).get('lang');}catch(e){}
+      setLanguage((requested==='en'||requested==='tr')?requested:(readStoredLanguage()==='en'?'en':'tr'));
+    })();
+  </script>
+</body>
+</html>
